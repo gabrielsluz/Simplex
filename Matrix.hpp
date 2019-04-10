@@ -4,13 +4,16 @@
 
 class Matrix{
   private:
-    float **matrix;
-    int numColumns;
-    int numRows;
+    float **_matrix;
+    int _numColumns;
+    int _numRows;
 
 
   public:
     Matrix(int, int);
+    ~Matrix();
+    void setElement(int,int,float);
+    void printMatrix();
 
 };
 
