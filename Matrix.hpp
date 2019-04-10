@@ -12,7 +12,7 @@ class Matrix{
 
 
   public:
-    Matrix(int, int, int, int);
+    Matrix(int, int);
     ~Matrix();
     void setElement(int, int, float);
 

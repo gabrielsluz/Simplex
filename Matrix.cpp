@@ -2,17 +2,17 @@
 #include <iostream>
 
 
-Matrix::Matrix(int numRows, int numColumns, int restrictions, int variables){
-  _numRows = numRows;
-  _numColumns = numColumns;
+Matrix::Matrix(int restrictions, int variables){
+  _numRows = restrictions + 1;
+  _numColumns = restrictions + variables + restrictions + 1;
   _restrictions = restrictions;
   _variables = variables;
 
-  _matrix = new float*[numRows];
+  _matrix = new float*[_numRows];
 
-  for(int i = 0; i < numRows; i++){
-    _matrix[i] = new float[numColumns];
-    for(int j = 0; j < numColumns; j++){
+  for(int i = 0; i < _numRows; i++){
+    _matrix[i] = new float[_numColumns];
+    for(int j = 0; j < _numColumns; j++){
       _matrix[i][j] = 0;
     }
   }

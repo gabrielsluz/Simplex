@@ -9,7 +9,7 @@ int main(){
 
   std::cin >> n >> m;
 
-  Matrix tableaux(n+1,n+m+n+1,n,m);
+  Matrix tableaux(n,m);
 
 
   tableaux.setVeroTM();
