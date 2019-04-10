@@ -28,7 +28,7 @@ Matrix::~Matrix(){
 
 void Matrix::setElement(int row, int column, float value){
   if(row >= _numRows || column >= _numColumns){
-    std::cout << "Error, dimensoes erradas" << std::endl;
+    std::cout << "Error, dimensoes erradas" << row << "-" << column << std::endl;
     return;
   }
   _matrix[row][column] = value;
@@ -39,10 +39,12 @@ void Matrix::setVeroTM(){
   for(int i=0; i<=_restrictions; i++){
     for(int j=0; j<_restrictions; j++){
       if((i-1) == j && i !=0){
-        _matrix[i][j] = 1;
+        //_matrix[i][j] = 1;
+        setElement(i,j,1);
       }
       else{
-        _matrix[i][j] = 0;
+        //_matrix[i][j] = 0;
+        setElement(i,j,0);
       }
     }
   }

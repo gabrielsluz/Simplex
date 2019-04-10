@@ -3,12 +3,13 @@
 
 
 int main(){
+
   int n, m;  //Numero de restricoes e variaveis
   int result;
 
   std::cin >> n >> m;
 
-  Matrix tableaux(m+1,m+n+m+1,n,m);
+  Matrix tableaux(n+1,n+m+n+1,n,m);
 
 
   tableaux.setVeroTM();
