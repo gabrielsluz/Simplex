@@ -91,7 +91,6 @@ void Matrix::getAandB(){
 
 }
 
-
 void Matrix::printMatrix(){
   for(int i =0; i< _numRows; i++){
     for(int j =0; j< _numColumns; j++){
@@ -99,4 +98,29 @@ void Matrix::printMatrix(){
     }
     std::cout << std::endl;
   }
+}
+
+
+
+int Matrix::Simplex(){
+  for(int i = 0; i <_restrictions; i++ ){
+    if(_matrix[i+1][_numColumns-1] < 0){
+      return Dual();
+    }
+  }
+  return Primal();
+}
+
+int Matrix::Primal(){
+  std::cout << "Primal" << std::endl;
+  return 0;
+}
+
+int Matrix::Dual(){
+  std::cout << "Dual" << std::endl;
+  return 0;
+}
+
+void Matrix::printResult(int result){
+
 }

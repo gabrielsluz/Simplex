@@ -15,9 +15,17 @@ class Matrix{
     Matrix(int, int, int, int);
     ~Matrix();
     void setElement(int, int, float);
+
     void setVeroTM();
     void getVectorC();
     void getAandB();
+
+    int Simplex();
+    int Primal();
+    int Dual();
+
+    void printResult(int);
+
 
     void printMatrix();
 

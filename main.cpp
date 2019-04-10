@@ -4,6 +4,7 @@
 
 int main(){
   int n, m;  //Numero de restricoes e variaveis
+  int result;
 
   std::cin >> n >> m;
 
@@ -17,6 +18,9 @@ int main(){
 
   std::cout << std::endl;
   tableaux.printMatrix();
+
+  result = tableaux.Simplex();
+  tableaux.printResult(result);
 
 
 
