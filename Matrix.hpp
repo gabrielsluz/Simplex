@@ -12,20 +12,28 @@ class Matrix{
 
 
   public:
+
     Matrix(int, int);
     ~Matrix();
     void setElement(int, int, float);
 
+    //Prepara tableau
     void setVeroTM();
     void getVectorC();
     void getAandB();
 
+    //Simplex core
     int Simplex();
     int Primal();
     int Dual();
 
-    void printResult(int);
+    //Simplex aux
+    int scanC();
+    int scanColumn(int);
+    void changeBase(int,int);
+    void pivot();
 
+    void printResult(int);
 
     void printMatrix();
 

@@ -9,19 +9,19 @@ int main(){
 
   std::cin >> n >> m;
 
-  Matrix tableaux(n,m);
+  Matrix tableau(n,m);
 
 
-  tableaux.setVeroTM();
-  tableaux.getVectorC();
-  tableaux.getAandB();
+  tableau.setVeroTM();
+  tableau.getVectorC();
+  tableau.getAandB();
 
 
   std::cout << std::endl;
-  tableaux.printMatrix();
+  tableau.printMatrix();
 
-  result = tableaux.Simplex();
-  tableaux.printResult(result);
+  result = tableau.Simplex();
+  tableau.printResult(result);
 
 
 

@@ -57,13 +57,15 @@ void Matrix::getVectorC(){
 
   for(int i=0; i<_variables; i++){
     std::cin >> value;
-    _matrix[0][i+offset] = -value;
+    //_matrix[0][i+offset] = -value;
+    setElement(0,i+offset, -value);
   }
 
   //Transforma em PLI
   offset = _restrictions + _variables;
   for(int i=0; i<_restrictions+1; i++){
-    _matrix[0][i+offset] = 0;
+    //_matrix[0][i+offset] = 0;
+    setElement(0,i+offset,0);
   }
 }
 
@@ -73,9 +75,13 @@ void Matrix::getAandB(){
 
   for(int i=0; i<_restrictions; i++){
     for(int j=0; j<_variables; j++){
-      std::cin >> _matrix[i+1][j+offset];
+      //std::cin >> _matrix[i+1][j+offset];
+      std::cin >> value;
+      setElement(i+1,j+offset,value);
     }
-    std::cin >> _matrix[i+1][_numColumns-1];
+    //std::cin >> _matrix[i+1][_numColumns-1];
+    std::cin >> value;
+    setElement(i+1,_numColumns-1,value);
   }
 
   //Transforma em PLI
@@ -83,10 +89,12 @@ void Matrix::getAandB(){
   for(int i=0; i<_restrictions; i++){
     for(int j=0; j<_variables; j++){
       if(i == j){
-        _matrix[i+1][j+offset] = 1;
+        //_matrix[i+1][j+offset] = 1;
+        setElement(i+1, j+offset,1);
       }
       else{
-        _matrix[i+1][j+offset] = 0;
+        //_matrix[i+1][j+offset] = 0;
+        setElement(i+1,j+offset,0);
       }
     }
   }
@@ -114,13 +122,83 @@ int Matrix::Simplex(){
 }
 
 int Matrix::Primal(){
+  int column=0;
+  int row=0;
   std::cout << "Primal" << std::endl;
+  while(true){
+    column = scanC();
+
+    if(column == -1){
+      std::cout << "Otima" << std::endl;
+      return 1;
+    }
+
+    row = scanColumn(column);
+
+    if(row == -1){
+      std::cout << "Ilimitada" << std::endl;
+      return 0;
+    }
+
+
+
+  }
+
+
   return 0;
 }
 
 int Matrix::Dual(){
   std::cout << "Dual" << std::endl;
   return 0;
+}
+
+
+
+int Matrix::scanC(){
+  int offset = _restrictions;
+
+  for(int i=0; i < _variables; i++){
+    if(_matrix[0][i+offset] < 0){
+      return i+offset;
+    }
+  }
+  return -1;
+}
+
+
+int Matrix::scanColumn(int column){
+  int offset = 1;
+  float min = 0.0;
+  bool isMinValid = false;
+  int row;
+
+  for(int i=0; i < _restrictions; i++){
+    if(!isMinValid){
+      if(_matrix[i+offset][column] > 0){
+        min = _matrix[i+offset][_numColumns-1]/_matrix[i+offset][column];
+        row = i+offset;
+        isMinValid = true;
+      }
+    }
+    else{
+      if(_matrix[i+offset][column] > 0){
+        if(min > _matrix[i+offset][_numColumns-1]/_matrix[i+offset][column]){
+          min = _matrix[i+offset][_numColumns-1]/_matrix[i+offset][column];
+          row = i+offset;
+        }
+      }
+    }
+  }
+  if(isMinValid){
+    return row;
+  }
+  return -1;
+}
+
+
+void changeBase(int row, int column){
+  
 }
 
 void Matrix::printResult(int result){
