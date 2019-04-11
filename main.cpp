@@ -22,6 +22,7 @@ int main(){
 
   result = tableau.Simplex();
   tableau.printResult(result);
+  tableau.printMatrix();
 
 
 

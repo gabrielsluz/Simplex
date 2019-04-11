@@ -139,8 +139,7 @@ int Matrix::Primal(){
       std::cout << "Ilimitada" << std::endl;
       return 0;
     }
-
-
+    changeBase(row,column);
 
   }
 
@@ -197,8 +196,25 @@ int Matrix::scanColumn(int column){
 }
 
 
-void changeBase(int row, int column){
-  
+void Matrix::changeBase(int row, int column){
+  for(int i=0; i < _numColumns; i++){
+    //_matrix[row][i] =  _matrix[row][i]/_matrix[row][column];
+    setElement(row,i,_matrix[row][i]/_matrix[row][column]);
+  }
+
+  for(int i=0; i < _numRows; i++){
+    if(i != row){
+      pivot(row,i,-(_matrix[i][column]));
+    }
+  }
+}
+
+void Matrix::pivot(int row1, int row2, float mult){
+  for(int i=0; i < _numColumns; i++){
+    //_matrix[row2][i] = _matrix[row2][i] + mult*_matrix[row1][i];
+    setElement(row2,i,_matrix[row2][i] + mult*_matrix[row1][i]);
+  }
+
 }
 
 void Matrix::printResult(int result){

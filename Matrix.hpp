@@ -31,7 +31,7 @@ class Matrix{
     int scanC();
     int scanColumn(int);
     void changeBase(int,int);
-    void pivot();
+    void pivot(int,int,float); // matrix[int2] = matrix[int1]*float + matrix[int2]
 
     void printResult(int);
 
