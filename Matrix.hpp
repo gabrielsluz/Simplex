@@ -25,7 +25,7 @@ class Matrix{
     //Simplex core
     int Simplex();
     int Primal();
-    int Dual();
+    int SimplexAux();
 
     //Simplex aux
     int scanC();

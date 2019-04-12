@@ -115,7 +115,7 @@ void Matrix::printMatrix(){
 int Matrix::Simplex(){
   for(int i = 0; i <_restrictions; i++ ){
     if(_matrix[i+1][_numColumns-1] < 0){
-      return Dual();
+      return SimplexAux();
     }
   }
   return Primal();
@@ -147,8 +147,12 @@ int Matrix::Primal(){
   return 0;
 }
 
-int Matrix::Dual(){
-  std::cout << "Dual" << std::endl;
+int Matrix::SimplexAux(){
+  int column=0;
+  int row=0;
+  std::cout << "SimplexAux" << std::endl;
+  
+
   return 0;
 }
 
