@@ -1,20 +1,21 @@
-#ifndef MATRIX_H
-#define MATRIX_H
+#ifndef SOLVER_H
+#define SOLVER_H
+
+#include "array2D.hpp"
+#include "PL.hpp"
 
 
-class Matrix{
+class Solver{
   private:
-    float** _matrix;
+    PL pl;
     int _restrictions;
     int _variables;
-    int _numRows;
-    int _numColumns;
 
-    float **_auxMatrix;
 
 
   public:
-
+    void 
+/*
     Solver(int, int);
     ~Solver();
     void setElement(int, int, float);
@@ -51,6 +52,7 @@ class Matrix{
     void printResult(int);
 
     void printMatrix();
+    */
 
 
 };

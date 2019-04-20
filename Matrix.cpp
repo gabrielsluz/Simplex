@@ -104,7 +104,6 @@ void Matrix::getAandB(){
       }
     }
   }
-
 }
 
 void Matrix::printMatrix(){
@@ -146,10 +145,7 @@ int Matrix::Primal(){
       return 0;
     }
     changeBase(row,column);
-
   }
-
-
   return 0;
 }
 
@@ -217,11 +213,25 @@ void Matrix::pivot(int row1, int row2, float mult){
 
 }
 
+
+//Implementacao da parte que lida com a PL auxiliar
+
 int Matrix::SimplexAux(){
-  int column=0;
-  int row=0;
+  int result=0;
   std::cout << "SimplexAux" << std::endl;
+
   createAuxMatrix();
+
+  result = PrimalAux();
+
+  if(result == 0)
+    std::cout << "Error Auxiliar Ilimitada";
+
+  if(_auxMatrix[0][_numColumns+_restrictions-1] < 0)
+    return -2; //Inviavel
+
+  //Copiar parte da auxiliar e substituir a primeira linha
+  //Chamar Simplex primal
 
 
   freeAuxMatrix();
@@ -305,84 +315,95 @@ void Matrix::copyAndChangeMatrix(){
       }
     }
   }
-
 }
 
-/*
-void Matrix::setVeroTMAux(){
-  for(int i=0; i<=_restrictions; i++){
-    for(int j=0; j<_restrictions; j++){
-      if((i-1) == j && i !=0){
-        setElementAux(i,j,1);
-      }
-      else{
-        setElementAux(i,j,0);
-      }
+
+int Matrix::PrimalAux(){
+  int column=0;
+  int row=0;
+  std::cout << "Primal" << std::endl;
+  while(true){
+    column = scanCAux();
+
+    if(column == -1){
+      std::cout << "Otima" << std::endl;
+      return 1;
     }
+
+    row = scanColumnAux(column);
+
+    if(row == -1){
+      std::cout << "Ilimitada" << std::endl;
+      return 0;
+    }
+    changeBaseAux(row,column);
   }
+  return 0;
 }
 
-void Matrix::getVectorCAux(){
+
+int Matrix::scanCAux(){
   int offset = _restrictions;
 
-  for(int i=0; i<_variables; i++){
-    setElementAux(0,i+offset,0);
+  for(int i=0; i < _variables; i++){
+    if(_auxMatrix[0][i+offset] < 0){
+      return i+offset;
+    }
   }
-
-  //Transforma em PLI
-  offset = _restrictions + _variables;
-  for(int i=0; i<_restrictions; i++){
-    setElementAux(0,i+offset,0);
-  }
-  //Variaveis auxiliares
-  offset = _restrictions + _variables + _restrictions;
-  for(int i=0; i<_restrictions; i++){
-    setElementAux(0,i+offset,1);
-  }
-  //Ultimo
-  setElementAux(0,_restrictions+offset,0);
-
+  return -1;
 }
 
-void Matrix::getAandBAux(){
-  int offset = _restrictions;
 
-  for(int i=0; i<_restrictions; i++){
-    for(int j=0; j<_variables; j++){
-      setElementAux(i+1, j+offset, _matrix[i+1][j+offset]);
-    }
+int Matrix::scanColumnAux(int column){
+  int offset = 1;
+  float min = 0.0;
+  bool isMinValid = false;
+  int row;
 
-    setElementAux(i+1,_numColumns + _restrictions -1,_matrix[i+1][_numColumns-1]);
-  }
-
-  //Transforma em PLI
-  offset = _restrictions + _variables;
-  for(int i=0; i<_restrictions; i++){
-    for(int j=0; j<_variables; j++){
-      if(i == j){
-        setElementAux(i+1, j+offset,1);
-      }
-      else{
-        setElementAux(i+1,j+offset,0);
+  for(int i=0; i < _restrictions; i++){
+    if(!isMinValid){
+      if(_auxMatrix[i+offset][column] > 0){
+        min = _auxMatrix[i+offset][_numColumns + _restrictions-1]/_auxMatrix[i+offset][column];
+        row = i+offset;
+        isMinValid = true;
       }
     }
-  }
-
-  //Variaveis auxliares
-  offset = _restrictions + _variables + _restrictions;
-  for(int i=0; i<_restrictions; i++){
-    for(int j=0; j<_variables; j++){
-      if(i == j){
-        setElementAux(i+1, j+offset,1);
-      }
-      else{
-        setElementAux(i+1,j+offset,0);
+    else{
+      if(_auxMatrix[i+offset][column] > 0){
+        if(min > _auxMatrix[i+offset][_numColumns + _restrictions-1]/_auxMatrix[i+offset][column]){
+          min = _auxMatrix[i+offset][_numColumns + _restrictions-1]/_auxMatrix[i+offset][column];
+          row = i+offset;
+        }
       }
     }
   }
-
+  if(isMinValid){
+    return row;
+  }
+  return -1;
 }
-*/
+
+
+void Matrix::changeBaseAux(int row, int column){
+  for(int i=0; i < _numColumns + _restrictions; i++){
+    //_auxMatrix[row][i] =  _auxMatrix[row][i]/_auxMatrix[row][column];
+    setElementAux(row,i,_auxMatrix[row][i]/_auxMatrix[row][column]);
+  }
+
+  for(int i=0; i < _numRows; i++){
+    if(i != row){
+      pivotAux(row,i,-(_auxMatrix[i][column]));
+    }
+  }
+}
+
+void Matrix::pivotAux(int row1, int row2, float mult){
+  for(int i=0; i < _numColumns + _restrictions; i++){
+    //_auxMatrix[row2][i] = _auxMatrix[row2][i] + mult*_auxMatrix[row1][i];
+    setElementAux(row2,i,_auxMatrix[row2][i] + mult*_auxMatrix[row1][i]);
+  }
+}
+
 
 void Matrix::printResult(int result){
 

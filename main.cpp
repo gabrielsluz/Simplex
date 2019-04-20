@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Matrix.hpp"
+#include "PL.hpp"
 
 
 int main(){
@@ -8,6 +8,11 @@ int main(){
   int result;
 
   std::cin >> n >> m;
+
+  PL pl;
+
+  pl.initAndInput(n,m);
+  /*
 
   Matrix tableau(n,m);
 
@@ -23,7 +28,7 @@ int main(){
   result = tableau.Simplex();
   tableau.printResult(result);
   tableau.printMatrix();
-
+*/
 
 
   return 0;
