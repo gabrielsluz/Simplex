@@ -25,9 +25,16 @@ class PL{
   int Simplex();
   int SimplexAux();
 
+//Funcoes auxiliares no Simplex
+  void negRow(int row);
+  int scanC();
+  int scanColumn(int column);
+  int changeBase(int row,int column);
+
 public:
   void initAndInput(int variables, int restrictions);
   int solve();
+
 };
 
 #endif

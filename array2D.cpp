@@ -21,6 +21,10 @@ float** array2D::allocArray(){
   return m;
 }
 
+array2D::~array2D(){
+  freeArray();
+}
+
 void array2D::freeArray(){
   for(int i = 0; i < _numRows; i++){
     delete [] _a[i];
@@ -51,4 +55,23 @@ void array2D::printElement(int row, int column){
     return;
   }
   std::cout << _a[row][column];
+}
+
+void array2D::multiplyRow(int row, int mult){
+  for(int i=0; i < _numColumns; i++){
+    _a[row][i] = mult*_a[row][i];
+  }
+}
+
+int array2D::scanRow(int row){
+  for(int i=0; i < _numColumns; i++){
+    if(_a[row][i] < 0){
+      return i;
+    }
+  }
+  return -1;
+}
+
+int array2D::scanColumn(int column){
+
 }

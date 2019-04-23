@@ -75,18 +75,69 @@ void PL::initAndInput(int variables, int restrictions){
 }
 
 int PL::solve(){
+  bool needAux = false;
+
   for(int i = 0; i < _b._numRows; i++ ){
     if(_b.getElement(i,0) < 0){
-      return SimplexAux();
+      negRow(i);
+      needAux = true;
     }
   }
+  if(needAux)
+    return SimplexAux();
+
   return Simplex();
 }
 
 int PL::Simplex(){
+  int column=0;
+  int row=0;
+  std::cout << "Simplex" << std::endl;
+  while(true){
+    column = scanC();
+
+    if(column == -1){
+      std::cout << "Otima" << std::endl;
+      return 1;
+    }
+
+    row = scanColumn(column);
+
+    if(row == -1){
+      std::cout << "Ilimitada" << std::endl;
+      return 0;
+    }
+    changeBase(row,column);
+  }
+  return 0;
+}
+
+
+int PL::SimplexAux(){
+
 
 }
 
-int PL::SimplexAux(){
+
+void PL::negRow(int row){
+  if(row > 0){
+    _A.multiplyRow(row-1,-1);
+    _b.multiplyRow(row,-1);
+    _Vero.multiplyRow(row,-1);
+  }
+  else if(row == 0){
+    _c.multiplyRow(0,-1);
+  }
+}
+
+int PL::scanC(){
+
+}
+
+int PL::scanColumn(int column){
+
+}
+
+int PL::changeBase(int row, int column){
 
 }

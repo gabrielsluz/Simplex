@@ -14,7 +14,6 @@ class Solver{
 
 
   public:
-    void 
 /*
     Solver(int, int);
     ~Solver();
