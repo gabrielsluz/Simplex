@@ -135,6 +135,9 @@ int PL::scanC(){
 }
 
 int PL::scanColumn(int column){
+  float min = 0.0;
+  bool isMinValid = false;
+  int row;
 
 }
 
