@@ -185,13 +185,14 @@ int PL::SimplexAux(){
     std::cout << "Inviavel" << std::endl;
     return -1;
   }
-  else{
-    std::cout << "Viavel" << std::endl;
-    return 1;
+
+  std::cout << "Viavel" << std::endl;
+  //Ajusta o Vero e chama o Simplex
+  for(int i=0; i < _Vero._numColumns; i++){
+    _Vero.setElement(0,i,0);
   }
 
-
-
+  return Simplex();
 }
 
 
@@ -352,7 +353,6 @@ void PL::changeBaseAux(int row, int column){
     for(int i=0; i < _A._numRows; i++){
       if(i != row){
         mult = -_A.getElement(i,column);
-        std::cout << "Mult = " << mult << std::endl;
         _A.pivot(row,i,mult);
         _aux.pivot(row,i,mult);
         _Vero.pivot(row+1,i+1,mult);
@@ -389,7 +389,6 @@ void PL::changeBaseAux(int row, int column){
     for(int i=0; i < _A._numRows; i++){
       if(i != row){
         mult = -_aux.getElement(i,column);
-        std::cout << "Mult = " << mult << std::endl;
         _A.pivot(row,i,mult);
         _aux.pivot(row,i,mult);
         _Vero.pivot(row+1,i+1,mult);
