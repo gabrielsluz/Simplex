@@ -104,7 +104,6 @@ void PL::createViableAux(){
     _Vero.pivot(i+1,0,-1);
     _b.pivot(i+1,0,-1);
   }
-  printAux();
 }
 
 void PL::initAndInput(int variables, int restrictions){
@@ -116,6 +115,7 @@ void PL::initAndInput(int variables, int restrictions){
 
 int PL::solve(){
   bool needAux = false;
+  int retValue = 0;
 
   for(int i = 0; i < _b._numRows; i++ ){
     if(_b.getElement(i,0) < 0){
@@ -123,28 +123,54 @@ int PL::solve(){
       needAux = true;
     }
   }
-  if(needAux)
-    return SimplexAux();
+  if(needAux){
+    retValue = SimplexAux();
+  }
+  else{
+    retValue =  Simplex();
+  }
 
-  return Simplex();
+  if(retValue == 1){
+    //Otima
+    std::cout << "otima" << std::endl;
+    std::cout << _b.getElement(0,0) << std::endl;
+    printOptSol();
+    for(int i=0; i < _Vero._numColumns; i++){
+      std::cout << _Vero.getElement(0,i) << " ";
+    }
+  }
+  else if(retValue == 0){
+    //Ilimitada
+    std::cout << "ilimitada" << std::endl;
+    printOptSol();
+    printUnlCert();
+  }
+  else if(retValue == -1){
+    //Inviavel
+    std::cout << "inviavel" << std::endl;
+    for(int i=0; i < _Vero._numColumns; i++){
+      std::cout << _Vero.getElement(0,i) << " ";
+    }
+    std::cout << std::endl;
+  }
 }
 
 int PL::Simplex(){
   int column=0;
   int row=0;
-  std::cout << "Simplex" << std::endl;
+//  std::cout << "Simplex" << std::endl;
   while(true){
     column = _c.scanRow(0);
 
     if(column == -1){
-      std::cout << "Otima" << std::endl;
+      //std::cout << "Otima" << std::endl;
       return 1;
     }
 
     row = scanColumn(column);
 
     if(row == -1){
-      std::cout << "Ilimitada" << std::endl;
+      //std::cout << "Ilimitada" << std::endl;
       return 0;
     }
     changeBase(row,column);
@@ -154,7 +180,7 @@ int PL::Simplex(){
 
 
 int PL::SimplexAux(){
-  std::cout << "Simplex Aux" << std::endl;
+  //std::cout << "Simplex Aux" << std::endl;
 
   createViableAux();
 
@@ -166,7 +192,7 @@ int PL::SimplexAux(){
     column = _cAux.scanRow(0);
 
     if(column == -1){
-      std::cout << "Otima" << std::endl;
+      //std::cout << "Otima" << std::endl;
       retValue = 1;
       break;
     }
@@ -174,7 +200,7 @@ int PL::SimplexAux(){
     row = scanColumnAux(column);
 
     if(row == -1){
-      std::cout << "Ilimitada" << std::endl;
+      //std::cout << "Ilimitada" << std::endl;
       retValue = 0;
       break;
     }
@@ -182,11 +208,11 @@ int PL::SimplexAux(){
   }
 
   if(retValue == 0 || _b.getElement(0,0) < 0){
-    std::cout << "Inviavel" << std::endl;
+    //std::cout << "Inviavel" << std::endl;
     return -1;
   }
 
-  std::cout << "Viavel" << std::endl;
+  //std::cout << "Viavel" << std::endl;
   //Ajusta o Vero e chama o Simplex
   for(int i=0; i < _Vero._numColumns; i++){
     _Vero.setElement(0,i,0);
@@ -429,4 +455,12 @@ void PL::printAux(){
 
 void PL::printVero(){
   _Vero.printArray();
+}
+
+void PL::printOptSol(){
+
+}
+
+void PL::printUnlCert(){
+
 }

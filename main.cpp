@@ -13,11 +13,11 @@ int main(){
 
   pl->initAndInput(m,n);
 
-  pl->printPl();
+  //pl->printPl();
 
-  result = pl->solve();
+  pl->solve();
 
-  pl->printPl();
+  //pl->printPl();
 
 
   delete pl;

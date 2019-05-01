@@ -32,9 +32,13 @@ class PL{
   void changeBase(int row,int column);
 
 //Funcoes auxiliares no SimplexAux
-int scanColumnAux(int column);
-void changeBaseAux(int row,int column);
-void createViableAux();
+  int scanColumnAux(int column);
+  void changeBaseAux(int row,int column);
+  void createViableAux();
+
+//Output
+  void printOptSol();
+  void printUnlCert();
 
 public:
   void initAndInput(int variables, int restrictions);
