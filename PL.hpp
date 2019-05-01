@@ -20,6 +20,7 @@ class PL{
   void inputAandB();
   void inputC();
   void createVero();
+  void createAux();
 
 //Simplex
   int Simplex();
@@ -30,11 +31,17 @@ class PL{
   int scanColumn(int column);
   void changeBase(int row,int column);
 
+//Funcoes auxiliares no SimplexAux
+int scanColumnAux(int column);
+void changeBaseAux(int row,int column);
+void createViableAux();
+
 public:
   void initAndInput(int variables, int restrictions);
   int solve();
   float getOtimo();
   void printPl();
+  void printAux();
   void printVero();
 
 };
