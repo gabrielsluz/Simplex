@@ -27,8 +27,8 @@ void PL::inputAandB(){
 
   //Transforma em PLI
   int offset = _variables;
-  for(int i=0; i<_restrictions; i++){
-    for(int j=0; j<_variables; j++){
+  for(int i=0; i < _restrictions; i++){
+    for(int j=0; j < _restrictions; j++){
       if(i == j){
         _A.setElement(i, j+offset,1);
       }
@@ -94,6 +94,7 @@ int PL::Simplex(){
   int row=0;
   std::cout << "Simplex" << std::endl;
   while(true){
+    printPl();
     column = _c.scanRow(0);
 
     if(column == -1){
@@ -114,6 +115,7 @@ int PL::Simplex(){
 
 
 int PL::SimplexAux(){
+  std::cout << "Simplex Aux" << std::endl;
 
   return 0;
 }
@@ -164,6 +166,7 @@ int PL::scanColumn(int column){
 void PL::changeBase(int row, int column){
   //Faz elemento da nova base ser igual a 1
   float mult = 1.0/_A.getElement(row, column);
+
   _A.multiplyRow(row,mult);
   _Vero.multiplyRow(row,mult);
   _b.multiplyRow(row+1,mult);
@@ -171,16 +174,19 @@ void PL::changeBase(int row, int column){
   //Pivoteamento
   //No vetor C
   mult = -_c.getElement(0,column);
+
   for(int i=0; i < _c._numColumns; i++){
     _c.setElement(0, i, _c.getElement(0,i) + _A.getElement(row,i)*mult);
   }
-  _b.setElement(0, 0, _b.getElement(0,0) + _b.getElement(row,0)*mult);
+  _b.setElement(0, 0, _b.getElement(0,0) + _b.getElement(row+1,0)*mult);
+  _Vero.pivot(row+1,0,mult);
 
   for(int i=0; i < _A._numRows; i++){
     if(i != row){
       mult = -_A.getElement(i,column);
+      std::cout << "Mult = " << mult << std::endl;
       _A.pivot(row,i,mult);
-      _Vero.pivot(row,i,mult);
+      _Vero.pivot(row+1,i+1,mult);
       _b.pivot(row+1,i+1,mult);
     }
   }
@@ -188,6 +194,17 @@ void PL::changeBase(int row, int column){
 
 float PL::getOtimo(){
   return _b.getElement(0,0);
+}
+
+void PL::printPl(){
+  std::cout << "Vero" << std::endl;
+  _Vero.printArray();
+  std::cout << "C" << std::endl;
+  _c.printArray();
+  std::cout << "A" << std::endl;
+  _A.printArray();
+  std::cout << "b" << std::endl;
+  _b.printArray();
 }
 
 void PL::printVero(){

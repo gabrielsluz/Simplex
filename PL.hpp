@@ -34,6 +34,7 @@ public:
   void initAndInput(int variables, int restrictions);
   int solve();
   float getOtimo();
+  void printPl();
   void printVero();
 
 };

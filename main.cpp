@@ -11,11 +11,13 @@ int main(){
 
   PL *pl = new PL;
 
-  pl->initAndInput(n,m);
+  pl->initAndInput(m,n);
+
+  pl->printPl();
 
   result = pl->solve();
-  std::cout << pl->getOtimo() << std::endl;
-  pl->printVero();
+
+  pl->printPl();
 
 
   delete pl;
