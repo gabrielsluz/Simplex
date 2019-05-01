@@ -57,12 +57,14 @@ void array2D::printElement(int row, int column){
   std::cout << _a[row][column];
 }
 
-void array2D::multiplyRow(int row, int mult){
+//Multiplica uma linha da matriz por um numero
+void array2D::multiplyRow(int row, float mult){
   for(int i=0; i < _numColumns; i++){
     _a[row][i] = mult*_a[row][i];
   }
 }
 
+//Varre linha da matriz verificando se possui um elemento negativo e retorna o primeiro que encontrar
 int array2D::scanRow(int row){
   for(int i=0; i < _numColumns; i++){
     if(_a[row][i] < 0){
@@ -72,6 +74,18 @@ int array2D::scanRow(int row){
   return -1;
 }
 
-int array2D::scanColumn(int column){
+//Soma a linha row1*mult com row2, colocando o resultado na linha row2
+void array2D::pivot(int row1, int row2, float mult){
+  for(int i=0; i < _numColumns; i++){
+    setElement(row2, i, mult*getElement(row1,i) + getElement(row2,i));
+  }
+}
 
+void array2D::printArray(){
+  for(int i = 0; i < _numRows; i++){
+    for(int j=0; j < _numColumns; j++){
+      std::cout << _a[i][j] << " ";
+    }
+    std::cout << std::endl;
+  }
 }

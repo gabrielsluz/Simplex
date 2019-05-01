@@ -94,7 +94,7 @@ int PL::Simplex(){
   int row=0;
   std::cout << "Simplex" << std::endl;
   while(true){
-    column = scanC();
+    column = _c.scanRow(0);
 
     if(column == -1){
       std::cout << "Otima" << std::endl;
@@ -115,7 +115,7 @@ int PL::Simplex(){
 
 int PL::SimplexAux(){
 
-
+  return 0;
 }
 
 
@@ -130,17 +130,66 @@ void PL::negRow(int row){
   }
 }
 
-int PL::scanC(){
-
-}
-
+//Procura o elemento em uma coluna de A que minimiza a razao _b[i][0]/_A[i][column]
 int PL::scanColumn(int column){
   float min = 0.0;
   bool isMinValid = false;
   int row;
 
+  for(int i=0; i < _A._numRows; i++){
+    if(!isMinValid){
+      if(_A.getElement(i,column) > 0){
+        min = _b.getElement(i+1,0)/_A.getElement(i,column);
+        row = i;
+        isMinValid = true;
+      }
+    }
+    else{
+      if(_A.getElement(i,column) > 0){
+        if(min > _b.getElement(i+1,0)/_A.getElement(i,column)){
+          min = _b.getElement(i+1,0)/_A.getElement(i,column);
+          row = i;
+        }
+      }
+    }
+  }
+  if(isMinValid){
+    return row;
+  }
+  return -1;
+
 }
 
-int PL::changeBase(int row, int column){
+//Faz o pivoteamento para trocar a base
+void PL::changeBase(int row, int column){
+  //Faz elemento da nova base ser igual a 1
+  float mult = 1.0/_A.getElement(row, column);
+  _A.multiplyRow(row,mult);
+  _Vero.multiplyRow(row,mult);
+  _b.multiplyRow(row+1,mult);
 
+  //Pivoteamento
+  //No vetor C
+  mult = -_c.getElement(0,column);
+  for(int i=0; i < _c._numColumns; i++){
+    _c.setElement(0, i, _c.getElement(0,i) + _A.getElement(row,i)*mult);
+  }
+  _b.setElement(0, 0, _b.getElement(0,0) + _b.getElement(row,0)*mult);
+
+  for(int i=0; i < _A._numRows; i++){
+    if(i != row){
+      mult = -_A.getElement(i,column);
+      _A.pivot(row,i,mult);
+      _Vero.pivot(row,i,mult);
+      _b.pivot(row+1,i+1,mult);
+    }
+  }
+}
+
+float PL::getOtimo(){
+  return _b.getElement(0,0);
+}
+
+void PL::printVero(){
+  _Vero.printArray();
 }

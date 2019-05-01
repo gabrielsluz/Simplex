@@ -9,26 +9,16 @@ int main(){
 
   std::cin >> n >> m;
 
-  PL pl;
+  PL *pl = new PL;
 
-  pl.initAndInput(n,m);
-  /*
+  pl->initAndInput(n,m);
 
-  Matrix tableau(n,m);
-
-
-  tableau.setVeroTM();
-  tableau.getVectorC();
-  tableau.getAandB();
+  result = pl->solve();
+  std::cout << pl->getOtimo() << std::endl;
+  pl->printVero();
 
 
-  std::cout << std::endl;
-  tableau.printMatrix();
-
-  result = tableau.Simplex();
-  tableau.printResult(result);
-  tableau.printMatrix();
-*/
+  delete pl;
 
 
   return 0;

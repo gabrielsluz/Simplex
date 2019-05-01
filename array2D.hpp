@@ -18,9 +18,10 @@ public:
   void setElement(int row, int column, float value);
   float getElement(int row, int column);
   void printElement(int row, int column);
-  void multiplyRow(int row, int mult);
+  void multiplyRow(int row, float mult);
   int scanRow(int row);
-  int scanColumn(int column);
+  void pivot(int row1, int row2, float mult);
+  void printArray();
 };
 
 

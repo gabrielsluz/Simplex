@@ -46,7 +46,7 @@ class Matrix{
     int scanCAux();
     int scanColumnAux(int);
     void changeBaseAux(int,int);
-    void pivotAux(int,int,float); // matrix[int2] = matrix[int1]*float + matrix[int2]
+    void pivotAux(int row1,int row2,float mult); // matrix[int2] = matrix[int1]*float + matrix[int2]
 
     void printResult(int);
 
