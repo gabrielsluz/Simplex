@@ -8,7 +8,6 @@ class PL{
   array2D _A;
   array2D _b;
   array2D _c;
-  array2D _Vero;
   array2D _aux;
   array2D _cAux;
 
@@ -19,7 +18,6 @@ class PL{
   void initialize(int variables, int restrictions);
   void inputAandB();
   void inputC();
-  void createVero();
   void createAux();
 
 //Simplex
@@ -46,7 +44,6 @@ public:
   float getOtimo();
   void printPl();
   void printAux();
-  void printVero();
 
 };
 
