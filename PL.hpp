@@ -42,7 +42,7 @@ class PL{
 
 public:
   void initAndInput(int variables, int restrictions);
-  int solve();
+  void solve();
   float getOtimo();
   void printPl();
   void printAux();

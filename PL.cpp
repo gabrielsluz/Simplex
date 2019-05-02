@@ -113,7 +113,7 @@ void PL::initAndInput(int variables, int restrictions){
   inputAandB();
 }
 
-int PL::solve(){
+void PL::solve(){
   bool needAux = false;
   int retValue = 0;
 
@@ -138,12 +138,14 @@ int PL::solve(){
     for(int i=0; i < _Vero._numColumns; i++){
       std::cout << _Vero.getElement(0,i) << " ";
     }
+    std::cout << std::endl;
   }
   else if(retValue == 0){
     //Ilimitada
     std::cout << "ilimitada" << std::endl;
     printOptSol();
     printUnlCert();
+    std::cout << std::endl;
   }
   else if(retValue == -1){
     //Inviavel
@@ -458,6 +460,50 @@ void PL::printVero(){
 }
 
 void PL::printOptSol(){
+  float *sol = new float[_restrictions];
+
+  for(int i=0; i < _restrictions; i++){
+    sol[i] = 0;
+  }
+
+  printPl();
+  std::cout << std::endl;
+  int pos = -1;
+  bool foundOne = false;
+  for(int i=0; i < _variables; i++){
+    foundOne = false;
+    pos = -1;
+    if(_c.getElement(0,i) != 0){
+      continue;
+    }
+    for(int j=0; j < _A._numRows; j++){
+      std::cout << _A.getElement(j,i) <<  std::endl;
+      if(_A.getElement(j,i) != 0 && _A.getElement(j,i) != 1){
+        pos = -1;
+        std::cout << "Break" << std::endl;
+        break;
+      }
+      else if(_A.getElement(j,i) == 1){
+        if(!foundOne){
+          foundOne = true;
+          pos = j;
+        }
+        else{
+          pos = -1;
+        }
+      }
+    }
+    if(pos != -1){
+      sol[pos] = _b.getElement(pos+1,0);
+    }
+  }
+
+  for(int i=0; i < _restrictions; i++){
+    std::cout << sol[i] <<  " ";
+  }
+  std::cout << std::endl;
+
+  delete [] sol;
 
 }
 
