@@ -14,6 +14,8 @@ class PL{
   int _restrictions;
   int _variables;
 
+  int UnlimitedColumn;
+
 //Input e inicializar
   void initialize(int variables, int restrictions);
   void inputAandB();

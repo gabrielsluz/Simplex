@@ -157,6 +157,7 @@ int PL::Simplex(){
     row = scanColumn(column);
 
     if(row == -1){
+      UnlimitedColumn = column;
       //std::cout << "Ilimitada" << std::endl;
       return 0;
     }
@@ -454,7 +455,7 @@ void PL::printOptSol(){
       }
     }
     if(pos != -1){
-      sol[pos] = _b.getElement(pos+1,0);
+      sol[i] = _b.getElement(pos+1,0);
     }
   }
 
@@ -468,5 +469,48 @@ void PL::printOptSol(){
 }
 
 void PL::printUnlCert(){
+  float *certify = new float[_variables];
+  int pos = -1;
+  bool foundOne = false;
 
+  certify[UnlimitedColumn] = 1;
+
+  for(int i=0; i < _variables; i++){
+    foundOne = false;
+    pos = -1;
+    if(_c.getElement(0,i) != 0){
+      if(i != UnlimitedColumn){
+        certify[i] = 0;
+      }
+      continue;
+    }
+    for(int j=0; j < _A._numRows; j++){
+      if(_A.getElement(j,i) != 0 && _A.getElement(j,i) != 1){
+        pos = -1;
+        break;
+      }
+      else if(_A.getElement(j,i) == 1){
+        if(!foundOne){
+          foundOne = true;
+          pos = j;
+        }
+        else{
+          pos = -1;
+        }
+      }
+    }
+    if(pos != -1){
+      certify[i] = -_A.getElement(pos,UnlimitedColumn);
+    }
+    else{
+      certify[i] = 0;
+    }
+  }
+
+  for(int i=0; i < _variables; i++){
+    std::cout << certify[i] << " ";
+  }
+
+
+  delete [] certify;
 }
