@@ -8,6 +8,7 @@ void PL::initialize(int variables, int restrictions){
   _A.initialize(_restrictions, _variables + _restrictions);
   _b.initialize(_restrictions + 1, 1);
   _c.initialize(1,_variables + _restrictions);
+  _base = new int[_restrictions];
 }
 
 void PL::inputAandB(){
@@ -145,8 +146,14 @@ void PL::solve(){
 int PL::Simplex(){
   int column=0;
   int row=0;
-//  std::cout << "Simplex" << std::endl;
+ //std::cout << "Simplex" << std::endl;
+
+ for(int i=0; i < _restrictions; i++){
+   _base[i] = _variables + i;
+ }
+
   while(true){
+    //printPl();
     column = _c.scanRow(0);
 
     if(column == -1){
@@ -157,11 +164,12 @@ int PL::Simplex(){
     row = scanColumn(column);
 
     if(row == -1){
-      UnlimitedColumn = column;
+      _UnlimitedColumn = column;
       //std::cout << "Ilimitada" << std::endl;
       return 0;
     }
     changeBase(row,column);
+    _base[row] = column;
   }
   return 0;
 }
@@ -171,12 +179,19 @@ int PL::SimplexAux(){
   //std::cout << "Simplex Aux" << std::endl;
 
   createViableAux();
+  for(int i=0; i < _restrictions; i++){
+    _base[i] = _variables + _restrictions + i;
+  }
 
 
   int column=0;
   int row=0;
-  int retValue =0 ;
+  int retValue =0;
+  float num = 0.0;
+  float mult = 0;
+
   while(true){
+    //printAux();
     column = _cAux.scanRow(0);
 
     if(column == -1){
@@ -193,6 +208,7 @@ int PL::SimplexAux(){
       break;
     }
     changeBaseAux(row,column);
+    _base[row] = column;
   }
 
   if(retValue == 0 || _b.getElement(0,0) < 0){
@@ -201,6 +217,26 @@ int PL::SimplexAux(){
   }
 
   //std::cout << "Viavel" << std::endl;
+  //Pivoteamento para criar bases canonicas
+//  std::cout << "Rumo ao Simplex" << std::endl;
+//  printPl();
+  for(int i=0; i < _A._numRows; i++){
+    //std::cout << _base[i] << std::endl;
+    if(_base[i] < _variables+_restrictions){
+      mult = -_c.getElement(0,_base[i]);
+    }
+    else{
+      mult = 0;
+    }
+
+    for(int j=0; j < _A._numColumns; j++){
+      num = _c.getElement(0,j) + (mult* _A.getElement(i,j));
+      _c.setElement(0,j,num);
+    }
+    _b.pivot(i+1,0,mult);
+  }
+//  std::cout << "Preparada" << std::endl;
+//  printPl();
 
   return Simplex();
 }
@@ -473,13 +509,13 @@ void PL::printUnlCert(){
   int pos = -1;
   bool foundOne = false;
 
-  certify[UnlimitedColumn] = 1;
+  certify[_UnlimitedColumn] = 1;
 
   for(int i=0; i < _variables; i++){
     foundOne = false;
     pos = -1;
     if(_c.getElement(0,i) != 0){
-      if(i != UnlimitedColumn){
+      if(i != _UnlimitedColumn){
         certify[i] = 0;
       }
       continue;
@@ -500,7 +536,7 @@ void PL::printUnlCert(){
       }
     }
     if(pos != -1){
-      certify[i] = -_A.getElement(pos,UnlimitedColumn);
+      certify[i] = -_A.getElement(pos,_UnlimitedColumn);
     }
     else{
       certify[i] = 0;

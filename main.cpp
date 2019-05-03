@@ -12,6 +12,7 @@ int main(){
   PL *pl = new PL;
 
   pl->initAndInput(m,n);
+  //pl->printPl();
 
   //pl->printPl();
 
