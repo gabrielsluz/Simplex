@@ -4,6 +4,7 @@
 #include "array2D.hpp"
 
 
+
 class PL{
   array2D _A;
   array2D _b;
@@ -44,7 +45,7 @@ class PL{
 public:
   void initAndInput(int variables, int restrictions);
   void solve();
-  float getOtimo();
+  double getOtimo();
   void printPl();
   void printAux();
 

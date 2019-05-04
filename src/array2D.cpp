@@ -9,11 +9,11 @@ void array2D::initialize(int rows, int columns){
   _a = allocArray();
 }
 
-float** array2D::allocArray(){
-  float** m = new float*[_numRows];
+double** array2D::allocArray(){
+  double** m = new double*[_numRows];
 
   for(int i = 0; i < _numRows; i++){
-    m[i] = new float[_numColumns];
+    m[i] = new double[_numColumns];
     for(int j = 0; j < _numColumns; j++){
       m[i][j] = 0;
     }
@@ -33,19 +33,19 @@ void array2D::freeArray(){
   delete [] _a;
 }
 
-void array2D::setElement(int row, int column, float value){
-  if(row >= _numRows || column >= _numColumns){
+void array2D::setElement(int row, int column, double value){
+  /*if(row >= _numRows || column >= _numColumns){
     std::cout << "Error, dimensoes erradas" << row << "-" << column << std::endl;
     return;
-  }
+  }*/
   _a[row][column] = value;
 }
 
-float array2D::getElement(int row, int column){
-  if(row >= _numRows || column >= _numColumns){
+double array2D::getElement(int row, int column){
+  /*if(row >= _numRows || column >= _numColumns){
     std::cout << "Error, dimensoes erradas" << row << "-" << column << std::endl;
     return 0;
-  }
+  }*/
   return _a[row][column];
 }
 
@@ -58,7 +58,7 @@ void array2D::printElement(int row, int column){
 }
 
 //Multiplica uma linha da matriz por um numero
-void array2D::multiplyRow(int row, float mult){
+void array2D::multiplyRow(int row, double mult){
   for(int i=0; i < _numColumns; i++){
     _a[row][i] = mult*_a[row][i];
   }
@@ -75,7 +75,7 @@ int array2D::scanRow(int row){
 }
 
 //Soma a linha row1*mult com row2, colocando o resultado na linha row2
-void array2D::pivot(int row1, int row2, float mult){
+void array2D::pivot(int row1, int row2, double mult){
   for(int i=0; i < _numColumns; i++){
     setElement(row2, i, mult*getElement(row1,i) + getElement(row2,i));
   }

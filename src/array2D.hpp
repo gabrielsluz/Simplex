@@ -1,10 +1,11 @@
 #ifndef ARRAY2D_H
 #define ARRAY2D_H
 
+#define EPS 0.00001
 
 class array2D{
 private:
-  float **_a;
+  double **_a;
 
 public:
   int _numRows;
@@ -13,14 +14,14 @@ public:
   ~array2D();
 
   void initialize(int rows, int columns);
-  float** allocArray();
+  double** allocArray();
   void freeArray();
-  void setElement(int row, int column, float value);
-  float getElement(int row, int column);
+  void setElement(int row, int column, double value);
+  double getElement(int row, int column);
   void printElement(int row, int column);
-  void multiplyRow(int row, float mult);
+  void multiplyRow(int row, double mult);
   int scanRow(int row);
-  void pivot(int row1, int row2, float mult);
+  void pivot(int row1, int row2, double mult);
   void printArray();
 };
 

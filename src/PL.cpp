@@ -1,5 +1,6 @@
 #include "PL.hpp"
 #include <iostream>
+#include <iomanip>
 
 void PL::initialize(int variables, int restrictions){
   _variables = variables;
@@ -12,7 +13,7 @@ void PL::initialize(int variables, int restrictions){
 }
 
 void PL::inputAandB(){
-  float value = 0.0;
+  double value = 0.0;
 
   for(int i=0; i < _restrictions; i++){
     for(int j=0; j < _variables; j++){
@@ -40,7 +41,7 @@ void PL::inputAandB(){
 }
 
 void PL::inputC(){
-  float value = 0.0;
+  double value = 0.0;
 
   for(int i=0; i<_variables; i++){
     std::cin >> value;
@@ -78,7 +79,7 @@ void PL::createViableAux(){
   _cAux.initialize(1, _c._numColumns + _restrictions);
   createAux();
 
-  float sum = 0;
+  double sum = 0;
 
   //Pivoteamento para criar bases viaveis
   for(int i=0; i < _A._numColumns; i++){
@@ -99,6 +100,7 @@ void PL::initAndInput(int variables, int restrictions){
   inputAandB();
 }
 
+//Chama o Simplex ou SimplexAux e imprime o output
 void PL::solve(){
   bool needAux = false;
   int retValue = 0;
@@ -117,7 +119,7 @@ void PL::solve(){
   }
 
   if(retValue == 1){
-    //Otima
+    //Otima std::setprecision()
     std::cout << "otima" << std::endl;
     std::cout << _b.getElement(0,0) << std::endl;
     printOptSol();
@@ -187,8 +189,8 @@ int PL::SimplexAux(){
   int column=0;
   int row=0;
   int retValue =0;
-  float num = 0.0;
-  float mult = 0;
+  double num = 0.0;
+  double mult = 0;
 
   while(true){
     //printAux();
@@ -254,7 +256,7 @@ void PL::negRow(int row){
 
 //Procura o elemento em uma coluna de A que minimiza a razao _b[i][0]/_A[i][column]
 int PL::scanColumn(int column){
-  float min = 0.0;
+  double min = 0.0;
   bool isMinValid = false;
   int row;
 
@@ -285,7 +287,7 @@ int PL::scanColumn(int column){
 //Faz o pivoteamento para trocar a base
 void PL::changeBase(int row, int column){
   //Faz elemento da nova base ser igual a 1
-  float mult = 1.0/_A.getElement(row, column);
+  double mult = 1.0/_A.getElement(row, column);
 
   _A.multiplyRow(row,mult);
   _b.multiplyRow(row+1,mult);
@@ -311,7 +313,7 @@ void PL::changeBase(int row, int column){
 
 //Procura o elemento em uma coluna de A que minimiza a razao _b[i][0]/_A[i][column]
 int PL::scanColumnAux(int column){
-  float min = 0.0;
+  double min = 0.0;
   bool isMinValid = false;
   int row;
 
@@ -369,7 +371,7 @@ int PL::scanColumnAux(int column){
 void PL::changeBaseAux(int row, int column){
   if(column < _A._numColumns){
     //Faz elemento da nova base ser igual a 1
-    float mult = 1.0/_A.getElement(row, column);
+    double mult = 1.0/_A.getElement(row, column);
     int offset = 0;
 
     _A.multiplyRow(row,mult);
@@ -402,7 +404,7 @@ void PL::changeBaseAux(int row, int column){
   else{
     column -= _A._numColumns;
     //Faz elemento da nova base ser igual a 1
-    float mult = 1.0/_aux.getElement(row, column);
+    double mult = 1.0/_aux.getElement(row, column);
     int offset = 0;
 
     _A.multiplyRow(row,mult);
@@ -435,7 +437,7 @@ void PL::changeBaseAux(int row, int column){
 }
 
 
-float PL::getOtimo(){
+double PL::getOtimo(){
   return _b.getElement(0,0);
 }
 
@@ -461,7 +463,7 @@ void PL::printAux(){
 
 
 void PL::printOptSol(){
-  float *sol = new float[_variables];
+  double *sol = new double[_variables];
 
   for(int i=0; i < _variables; i++){
     sol[i] = 0;
@@ -505,7 +507,7 @@ void PL::printOptSol(){
 }
 
 void PL::printUnlCert(){
-  float *certify = new float[_variables];
+  double *certify = new double[_variables];
   int pos = -1;
   bool foundOne = false;
 
