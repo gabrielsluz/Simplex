@@ -67,7 +67,7 @@ void array2D::multiplyRow(int row, double mult){
 //Varre linha da matriz verificando se possui um elemento negativo e retorna o primeiro que encontrar
 int array2D::scanRow(int row){
   for(int i=0; i < _numColumns; i++){
-    if(_a[row][i] < 0){
+    if(!isEqual(_a[row][i],0,EPS) && _a[row][i] < 0){
       return i;
     }
   }
@@ -88,4 +88,21 @@ void array2D::printArray(){
     }
     std::cout << std::endl;
   }
+}
+
+double array2D::absolute(double x){
+  return x < 0 ? -x : x;
+}
+
+bool array2D::isEqual(double a, double b, double eps){
+  double diff = absolute(a - b);
+  a = absolute(a);
+  b = absolute(b);
+
+  double largest = b > a ? b : a;
+  largest = largest > 1 ? largest : 1;
+
+  if(diff <= largest*eps)
+    return true;
+  return false;
 }

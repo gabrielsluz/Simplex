@@ -119,7 +119,8 @@ void PL::solve(){
   }
 
   if(retValue == 1){
-    //Otima std::setprecision()
+    //Otima  std::cout << std::fixed << std::setprecision(7);
+    //std::cout << std::fixed << std::setprecision(7);
     std::cout << "otima" << std::endl;
     std::cout << _b.getElement(0,0) << std::endl;
     printOptSol();
@@ -130,6 +131,7 @@ void PL::solve(){
   }
   else if(retValue == 0){
     //Ilimitada
+    //std::cout << std::fixed << std::setprecision(7);
     std::cout << "ilimitada" << std::endl;
     printOptSol();
     printUnlCert();
@@ -137,6 +139,7 @@ void PL::solve(){
   }
   else if(retValue == -1){
     //Inviavel
+    //std::cout << std::fixed << std::setprecision(7);
     std::cout << "inviavel" << std::endl;
     for(int i= _variables; i < _variables + _restrictions; i++){
       std::cout << _cAux.getElement(0,i) << " ";
@@ -213,7 +216,8 @@ int PL::SimplexAux(){
     _base[row] = column;
   }
 
-  if(retValue == 0 || _b.getElement(0,0) < 0){
+  if(retValue == 0 || (!isEqual(_b.getElement(0,0),0,EPS) && _b.getElement(0,0) < 0)){
+  //if(retValue == 0 || !isEqual(_b.getElement(0,0),0,EPS)){
     //std::cout << "Inviavel" << std::endl;
     return -1;
   }
@@ -262,14 +266,14 @@ int PL::scanColumn(int column){
 
   for(int i=0; i < _A._numRows; i++){
     if(!isMinValid){
-      if(_A.getElement(i,column) > 0){
+      if(!isEqual(_A.getElement(i,column),0,EPS) && _A.getElement(i,column) > 0){
         min = _b.getElement(i+1,0)/_A.getElement(i,column);
         row = i;
         isMinValid = true;
       }
     }
     else{
-      if(_A.getElement(i,column) > 0){
+      if(!isEqual(_A.getElement(i,column),0,EPS) && _A.getElement(i,column) > 0){
         if(min > _b.getElement(i+1,0)/_A.getElement(i,column)){
           min = _b.getElement(i+1,0)/_A.getElement(i,column);
           row = i;
@@ -320,14 +324,14 @@ int PL::scanColumnAux(int column){
   if(column < _A._numColumns){
   for(int i=0; i < _A._numRows; i++){
     if(!isMinValid){
-      if(_A.getElement(i,column) > 0){
+      if(!isEqual(_A.getElement(i,column),0,EPS) && _A.getElement(i,column) > 0){
         min = _b.getElement(i+1,0)/_A.getElement(i,column);
         row = i;
         isMinValid = true;
       }
     }
     else{
-      if(_A.getElement(i,column) > 0){
+      if(!isEqual(_A.getElement(i,column),0,EPS) && _A.getElement(i,column) > 0){
         if(min > _b.getElement(i+1,0)/_A.getElement(i,column)){
           min = _b.getElement(i+1,0)/_A.getElement(i,column);
           row = i;
@@ -344,14 +348,14 @@ int PL::scanColumnAux(int column){
     column -= _A._numColumns;
     for(int i=0; i < _aux._numRows; i++){
       if(!isMinValid){
-        if(_aux.getElement(i,column) > 0){
+        if(!isEqual(_aux.getElement(i,column),0,EPS) && _aux.getElement(i,column) > 0){
           min = _b.getElement(i+1,0)/_aux.getElement(i,column);
           row = i;
           isMinValid = true;
         }
       }
       else{
-        if(_aux.getElement(i,column) > 0){
+        if(!isEqual(_aux.getElement(i,column),0,EPS) && _aux.getElement(i,column) > 0){
           if(min > _b.getElement(i+1,0)/_aux.getElement(i,column)){
             min = _b.getElement(i+1,0)/_aux.getElement(i,column);
             row = i;
@@ -474,15 +478,15 @@ void PL::printOptSol(){
   for(int i=0; i < _variables; i++){
     foundOne = false;
     pos = -1;
-    if(_c.getElement(0,i) != 0){
+    if(!isEqual(_c.getElement(0,i),0,EPS)){
       continue;
     }
     for(int j=0; j < _A._numRows; j++){
-      if(_A.getElement(j,i) != 0 && _A.getElement(j,i) != 1){
+      if(!isEqual(_A.getElement(j,i),0,EPS) && !isEqual(_A.getElement(j,i),1,EPS)){
         pos = -1;
         break;
       }
-      else if(_A.getElement(j,i) == 1){
+      else if(isEqual(_A.getElement(j,i),1,EPS)){
         if(!foundOne){
           foundOne = true;
           pos = j;
@@ -516,18 +520,18 @@ void PL::printUnlCert(){
   for(int i=0; i < _variables; i++){
     foundOne = false;
     pos = -1;
-    if(_c.getElement(0,i) != 0){
+    if(!isEqual(_c.getElement(0,i),0,EPS)){
       if(i != _UnlimitedColumn){
         certify[i] = 0;
       }
       continue;
     }
     for(int j=0; j < _A._numRows; j++){
-      if(_A.getElement(j,i) != 0 && _A.getElement(j,i) != 1){
+      if(!isEqual(_A.getElement(j,i),0,EPS) && !isEqual(_A.getElement(j,i),1,EPS)){
         pos = -1;
         break;
       }
-      else if(_A.getElement(j,i) == 1){
+      else if(isEqual(_A.getElement(j,i),1,EPS)){
         if(!foundOne){
           foundOne = true;
           pos = j;
@@ -551,4 +555,21 @@ void PL::printUnlCert(){
 
 
   delete [] certify;
+}
+
+double PL::absolute(double x){
+  return x < 0 ? -x : x;
+}
+
+bool PL::isEqual(double a, double b, double eps){
+  double diff = absolute(a - b);
+  a = absolute(a);
+  b = absolute(b);
+
+  double largest = b > a ? b : a;
+  largest = largest > 1 ? largest : 1;
+
+  if(diff <= largest*eps)
+    return true;
+  return false;
 }

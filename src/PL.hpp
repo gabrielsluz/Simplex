@@ -42,6 +42,10 @@ class PL{
   void printOptSol();
   void printUnlCert();
 
+//Double op
+  double absolute(double x);
+  bool isEqual(double a, double b, double eps);
+
 public:
   void initAndInput(int variables, int restrictions);
   void solve();

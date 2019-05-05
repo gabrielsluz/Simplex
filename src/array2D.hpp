@@ -23,6 +23,9 @@ public:
   int scanRow(int row);
   void pivot(int row1, int row2, double mult);
   void printArray();
+  //Double op
+  double absolute(double x);
+  bool isEqual(double a, double b, double eps);
 };
 
 
