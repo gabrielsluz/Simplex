@@ -120,7 +120,7 @@ void PL::solve(){
 
   if(retValue == 1){
     //Otima  std::cout << std::fixed << std::setprecision(7);
-    //std::cout << std::fixed << std::setprecision(7);
+    std::cout << std::fixed << std::setprecision(7);
     std::cout << "otima" << std::endl;
     std::cout << _b.getElement(0,0) << std::endl;
     printOptSol();
@@ -131,7 +131,7 @@ void PL::solve(){
   }
   else if(retValue == 0){
     //Ilimitada
-    //std::cout << std::fixed << std::setprecision(7);
+    std::cout << std::fixed << std::setprecision(7);
     std::cout << "ilimitada" << std::endl;
     printOptSol();
     printUnlCert();
@@ -139,7 +139,7 @@ void PL::solve(){
   }
   else if(retValue == -1){
     //Inviavel
-    //std::cout << std::fixed << std::setprecision(7);
+    std::cout << std::fixed << std::setprecision(7);
     std::cout << "inviavel" << std::endl;
     for(int i= _variables; i < _variables + _restrictions; i++){
       std::cout << _cAux.getElement(0,i) << " ";
@@ -511,7 +511,7 @@ void PL::printOptSol(){
 }
 
 void PL::printUnlCert(){
-  double *certify = new double[_variables];
+  double *certify = new double[_variables + _restrictions];
   int pos = -1;
   bool foundOne = false;
 

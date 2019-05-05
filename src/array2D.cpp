@@ -34,18 +34,18 @@ void array2D::freeArray(){
 }
 
 void array2D::setElement(int row, int column, double value){
-  /*if(row >= _numRows || column >= _numColumns){
+  if(row >= _numRows || column >= _numColumns){
     std::cout << "Error, dimensoes erradas" << row << "-" << column << std::endl;
     return;
-  }*/
+  }
   _a[row][column] = value;
 }
 
 double array2D::getElement(int row, int column){
-  /*if(row >= _numRows || column >= _numColumns){
+  if(row >= _numRows || column >= _numColumns){
     std::cout << "Error, dimensoes erradas" << row << "-" << column << std::endl;
     return 0;
-  }*/
+  }
   return _a[row][column];
 }
 
